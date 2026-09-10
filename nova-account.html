@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -214,7 +213,7 @@
       <button type="submit" class="submit-btn">Créer mon compte</button>
     </form>
 
-    <div class="hint">Compte de démonstration — les identifiants sont stockés pour cet artifact, pas pour un vrai service sécurisé.</div>
+    <div class="hint">Compte de démonstration — les identifiants sont stockés dans ce navigateur (localStorage), pas sur un vrai serveur sécurisé.</div>
   </div>
 
   <div class="welcome" id="welcomeView">
@@ -257,7 +256,7 @@
     document.getElementById('welcomeEmail').textContent = email;
   }
 
-  document.getElementById('signupForm').addEventListener('submit', async (e) => {
+  document.getElementById('signupForm').addEventListener('submit', (e) => {
     e.preventDefault();
     hideMsg();
     const name = document.getElementById('signupName').value.trim();
@@ -267,16 +266,15 @@
     btn.disabled = true;
 
     try{
-      let exists = null;
-      try{ exists = await window.storage.get('account:' + email, false); } catch(err){ exists = null; }
+      const existing = localStorage.getItem('account:' + email);
 
-      if(exists){
+      if(existing){
         showMsg('Un compte existe déjà avec cet email.', 'error');
         btn.disabled = false;
         return;
       }
 
-      await window.storage.set('account:' + email, JSON.stringify({ name, email, password }), false);
+      localStorage.setItem('account:' + email, JSON.stringify({ name, email, password }));
       showMsg('Compte créé avec succès.', 'success');
       setTimeout(() => showWelcome(name, email), 500);
     }catch(err){
@@ -285,7 +283,7 @@
     btn.disabled = false;
   });
 
-  document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  document.getElementById('loginForm').addEventListener('submit', (e) => {
     e.preventDefault();
     hideMsg();
     const email = document.getElementById('loginEmail').value.trim().toLowerCase();
@@ -294,15 +292,14 @@
     btn.disabled = true;
 
     try{
-      let result = null;
-      try{ result = await window.storage.get('account:' + email, false); } catch(err){ result = null; }
+      const stored = localStorage.getItem('account:' + email);
 
-      if(!result){
+      if(!stored){
         showMsg('Aucun compte trouvé avec cet email.', 'error');
         btn.disabled = false;
         return;
       }
-      const account = JSON.parse(result.value);
+      const account = JSON.parse(stored);
       if(account.password !== password){
         showMsg('Mot de passe incorrect.', 'error');
         btn.disabled = false;
