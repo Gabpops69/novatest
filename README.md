@@ -248,6 +248,20 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;
 .gallery-grid div.zoom-touch img {
   transform: scale(1.08);
 }
+.gallery-grid div {
+  overflow: hidden;
+}
+
+.gallery-grid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.gallery-grid div:hover img {
+  transform: scale(1.25);
+}
 
 </style>
 </head>
