@@ -234,9 +234,40 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;
 .gallery-grid div:active img {
   transform: scale(1.05);
 }
+.gallery-grid div {
+  overflow: hidden;
+}
+
+.gallery-grid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.2s ease;
+}
+
+.gallery-grid div.zoom-touch img {
+  transform: scale(1.08);
+}
 
 </style>
 </head>
+<script>
+const images = document.querySelectorAll('.gallery-grid div');
+
+images.forEach(image => {
+  image.addEventListener('touchstart', () => {
+    image.classList.add('zoom-touch');
+  }, { passive: true });
+
+  image.addEventListener('touchend', () => {
+    image.classList.remove('zoom-touch');
+  });
+
+  image.addEventListener('touchcancel', () => {
+    image.classList.remove('zoom-touch');
+  });
+});
+</script>
 <body>
 
 <nav>
