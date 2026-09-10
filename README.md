@@ -214,6 +214,27 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;
   .reveal{opacity:1;transform:none;transition:none}
   *,*:before,*:after{animation:none!important;transition:none!important}
 }
+.gallery-grid div {
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.gallery-grid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.25s ease;
+}
+
+.gallery-grid div:active {
+  transform: scale(0.96);
+}
+
+.gallery-grid div:active img {
+  transform: scale(1.05);
+}
+
 </style>
 </head>
 <body>
