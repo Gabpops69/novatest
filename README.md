@@ -298,19 +298,7 @@ document.querySelectorAll('.gallery-grid img').forEach(img => {
 
 });
 </script>
-  image.addEventListener('touchstart', () => {
-    image.classList.add('zoom-touch');
-  }, { passive: true });
-
-  image.addEventListener('touchend', () => {
-    image.classList.remove('zoom-touch');
-  });
-
-  image.addEventListener('touchcancel', () => {
-    image.classList.remove('zoom-touch');
-  });
-});
-</script>
+ 
 <script>
 document.querySelectorAll('.gallery-grid img').forEach(img => {
   let zoom = 1;
