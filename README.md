@@ -417,9 +417,9 @@ document.querySelectorAll('.gallery-grid img').forEach(img => {
     <h2>De l'usine au pas de tir</h2>
     <div class="gallery-grid">
       <div><img src="eso1509b.jpg" alt="Image 1"></div>
-  <div><img src="images/image2.jpg" alt="Image 2"></div>
-  <div><img src="images/image3.jpg" alt="Image 3"></div>
-  <div><img src="images/image4.jpg" alt="Image 4"></div>
+  <div><img src="cpmjny.jpg" alt="Image 2"></div>
+  <div><img src="neptune-credit-960x640.jpg" alt="Image 3"></div>
+  <div><img src="la-geante-jupiter-1800x1016.jpg" alt="Image 4"></div>
   <div><img src="images/image5.jpg" alt="Image 5"></div>
   <div><img src="images/image6.jpg" alt="Image 6"></div>
     </div>
