@@ -227,7 +227,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;
       <a href="#programme">Programme</a>
       <a href="#galerie">Galerie</a>
     </div>
-    <a aria-label="Rejoindre l’équipe NOVA" class="nav-cta" href="nova-account.html" id="navCta">Rejoindre l'équipe</a>
+    <a aria-label="Rejoindre l’équipe NOVA" class="nav-cta" href="nova-team.html" id="navCta">Rejoindre l'équipe</a>
   </div>
 </nav>
 
@@ -324,7 +324,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;
   <div class="wrap">
     <div class="section-eyebrow">Rejoins-nous</div>
     <h2>L'espace a besoin de bâtisseurs</h2>
-    <a class="btn-primary" href="nova-account.html">Voir les postes ouverts</a>
+    <a class="btn-primary" href="nova-team.html">Voir les postes ouverts</a>
   </div>
 </section>
 
