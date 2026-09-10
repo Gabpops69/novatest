@@ -262,6 +262,17 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;
 .gallery-grid div:hover img {
   transform: scale(1.25);
 }
+.gallery-grid div {
+  overflow: hidden;
+}
+
+.gallery-grid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1);
+  transition: transform 0.1s ease;
+}
 
 </style>
 </head>
@@ -280,6 +291,29 @@ images.forEach(image => {
   image.addEventListener('touchcancel', () => {
     image.classList.remove('zoom-touch');
   });
+});
+</script>
+<script>
+document.querySelectorAll('.gallery-grid img').forEach(img => {
+  let zoom = 1;
+
+  img.addEventListener('wheel', function(event) {
+    event.preventDefault();
+
+    // Molette vers le haut = zoom
+    if (event.deltaY < 0) {
+      zoom += 0.1;
+    } 
+    // Molette vers le bas = dézoom
+    else {
+      zoom -= 0.1;
+    }
+
+    // Limites du zoom
+    zoom = Math.max(1, Math.min(2.5, zoom));
+
+    img.style.transform = `scale(${zoom})`;
+  }, { passive: false });
 });
 </script>
 <body>
