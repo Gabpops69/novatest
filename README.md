@@ -310,12 +310,12 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;
     <div class="section-eyebrow">Galerie</div>
     <h2>De l'usine au pas de tir</h2>
     <div class="gallery-grid">
-      <div>Image 1</div>
-      <div>Image 2</div>
-      <div>Image 3</div>
-      <div>Image 4</div>
-      <div>Image 5</div>
-      <div>Image 6</div>
+      <div><img src="eso1509b.jpg" alt="Image 1"></div>
+  <div><img src="images/image2.jpg" alt="Image 2"></div>
+  <div><img src="images/image3.jpg" alt="Image 3"></div>
+  <div><img src="images/image4.jpg" alt="Image 4"></div>
+  <div><img src="images/image5.jpg" alt="Image 5"></div>
+  <div><img src="images/image6.jpg" alt="Image 6"></div>
     </div>
   </div>
 </section>
