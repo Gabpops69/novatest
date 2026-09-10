@@ -308,7 +308,7 @@
       <a href="#programme">Programme</a>
       <a href="#galerie">Galerie</a>
     </div>
-    <a class="nav-cta" href="nova-account.html">Rejoindre l'équipe</a>
+    <a class="nav-cta" href="nova-account.html" id="navCta">Rejoindre l'équipe</a>
   </div>
 </nav>
 
@@ -436,6 +436,22 @@
   }
   updateCountdown();
   setInterval(updateCountdown, 1000);
+
+  // Affiche l'état connecté si un compte NOVA est actif dans ce navigateur
+  const currentUser = localStorage.getItem('nova_current_user');
+  if(currentUser){
+    try{
+      const user = JSON.parse(currentUser);
+      const navCta = document.getElementById('navCta');
+      navCta.textContent = `Bonjour, ${user.name} · Déconnexion`;
+      navCta.href = '#';
+      navCta.addEventListener('click', (e) => {
+        e.preventDefault();
+        localStorage.removeItem('nova_current_user');
+        window.location.reload();
+      });
+    }catch(err){}
+  }
 </script>
 
 </body>
