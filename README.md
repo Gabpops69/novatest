@@ -215,52 +215,24 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;
   *,*:before,*:after{animation:none!important;transition:none!important}
 }
 .gallery-grid div {
+  position: relative;
+  aspect-ratio: 4/3;
+  border: 1px solid var(--line);
+  border-radius: 12px;
   overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.15s ease;
+  background: var(--panel);
+  perspective: 800px;
 }
 
 .gallery-grid img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transition: transform 0.25s ease;
-}
-
-.gallery-grid div:active {
-  transform: scale(0.96);
-}
-
-.gallery-grid div:active img {
-  transform: scale(1.05);
-}
-.gallery-grid div {
-  overflow: hidden;
-}
-
-.gallery-grid img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.2s ease;
-}
-
-.gallery-grid div.zoom-touch img {
-  transform: scale(1.08);
-}
-.gallery-grid div {
-  overflow: hidden;
-}
-
-.gallery-grid img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.gallery-grid div:hover img {
-  transform: scale(1.25);
+  object-fit: contain;
+  display: block;
+  transform: scale(1) rotateX(0deg) rotateY(0deg);
+  transition: transform 0.15s ease-out;
+  transform-origin: center center;
+  cursor: zoom-in;
 }
 .gallery-grid div {
   overflow: hidden;
@@ -277,9 +249,55 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;
 </style>
 </head>
 <script>
-const images = document.querySelectorAll('.gallery-grid div');
+document.querySelectorAll('.gallery-grid img').forEach(img => {
 
-images.forEach(image => {
+  let zoom = 1;
+  let rotateX = 0;
+  let rotateY = 0;
+
+  img.addEventListener('wheel', function(event) {
+    event.preventDefault();
+
+    // Molette vers le haut : zoom
+    if (event.deltaY < 0) {
+      zoom += 0.15;
+    } else {
+      zoom -= 0.15;
+    }
+
+    // Limites
+    zoom = Math.max(1, Math.min(3, zoom));
+
+    img.style.transform =
+      `scale(${zoom}) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+  }, { passive: false });
+
+  // Petit effet 3D avec le déplacement de la souris
+  img.addEventListener('mousemove', function(event) {
+
+    const rect = img.getBoundingClientRect();
+
+    const x = (event.clientX - rect.left) / rect.width;
+    const y = (event.clientY - rect.top) / rect.height;
+
+    rotateY = (x - 0.5) * 10;
+    rotateX = -(y - 0.5) * 10;
+
+    img.style.transform =
+      `scale(${zoom}) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+  });
+
+  // Retour à plat quand la souris sort
+  img.addEventListener('mouseleave', function() {
+    rotateX = 0;
+    rotateY = 0;
+
+    img.style.transform =
+      `scale(${zoom}) rotateX(0deg) rotateY(0deg)`;
+  });
+
+});
+</script>
   image.addEventListener('touchstart', () => {
     image.classList.add('zoom-touch');
   }, { passive: true });
