@@ -1,457 +1,1339 @@
+<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NOVA — Mission Control</title>
+<title>NOVA — Espace membre</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
 <style>
-  :root{
-    --black: #060607;
-    --panel: #0D0E10;
-    --line: #232529;
-    --white: #F5F5F3;
-    --grey: #8A8D93;
-    --accent: #E8542A;
-  }
-  *{ box-sizing:border-box; margin:0; padding:0; }
-  html{ scroll-behavior: smooth; }
-  body{
-    background: var(--black);
-    color: var(--white);
-    font-family: 'Inter', sans-serif;
-    font-weight: 300;
-    -webkit-font-smoothing: antialiased;
-  }
-  a{ color: inherit; text-decoration: none; }
-  .wrap{ max-width: 1180px; margin: 0 auto; padding: 0 32px; }
+:root{
+  --black:#060607;
+  --panel:#0D0E10;
+  --panel2:#111216;
+  --line:#232529;
+  --white:#F5F5F3;
+  --grey:#8A8D93;
+  --accent:#E8542A;
+  --success:#49C77A;
+  --danger:#D94B4B;
+}
 
-  /* NAV */
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(
+      ellipse at 50% 0%,
+      rgba(232,84,42,.10),
+      transparent 45%
+    ),
+    var(--black);
+  color:var(--white);
+  font-family:'Inter',sans-serif;
+  font-weight:300;
+  -webkit-font-smoothing:antialiased;
+}
+
+button,
+input{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+.wrap{
+  width:min(1180px, calc(100% - 64px));
+  margin:auto;
+}
+
+/* =========================
+   NAVIGATION
+========================= */
+
+nav{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  z-index:50;
+
+  height:68px;
+
+  border-bottom:1px solid var(--line);
+
+  background:rgba(6,6,7,.78);
+  backdrop-filter:blur(14px);
+}
+
+nav .wrap{
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.brand{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;
+  font-size:1.35rem;
+  letter-spacing:.07em;
+}
+
+.brand span{
+  color:var(--accent);
+}
+
+.nav-right{
+  display:flex;
+  align-items:center;
+  gap:25px;
+}
+
+.back-link{
+  color:var(--grey);
+  font-size:.8rem;
+  transition:.2s;
+}
+
+.back-link:hover{
+  color:var(--white);
+}
+
+/* =========================
+   PAGE
+========================= */
+
+.page{
+  min-height:100vh;
+  padding:130px 0 70px;
+}
+
+.page-header{
+  margin-bottom:40px;
+}
+
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.72rem;
+  color:var(--accent);
+  letter-spacing:.06em;
+  margin-bottom:14px;
+}
+
+h1,
+h2,
+h3{
+  font-family:'Barlow Condensed',sans-serif;
+  text-transform:uppercase;
+}
+
+h1{
+  font-size:clamp(3rem,7vw,6rem);
+  line-height:.92;
+}
+
+.subtitle{
+  max-width:600px;
+  color:var(--grey);
+  margin-top:18px;
+  line-height:1.7;
+}
+
+/* =========================
+   AUTH LAYOUT
+========================= */
+
+.auth-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:2px;
+  max-width:900px;
+  margin:auto;
+}
+
+.auth-panel{
+  background:var(--panel);
+  border:1px solid var(--line);
+  padding:40px;
+}
+
+.auth-panel h2{
+  font-size:2rem;
+  margin-bottom:8px;
+}
+
+.panel-description{
+  color:var(--grey);
+  font-size:.88rem;
+  line-height:1.6;
+  margin-bottom:30px;
+}
+
+/* =========================
+   FORM
+========================= */
+
+.form-group{
+  margin-bottom:20px;
+}
+
+.form-group label{
+  display:block;
+  margin-bottom:8px;
+
+  font-family:'IBM Plex Mono',monospace;
+  color:var(--grey);
+  font-size:.72rem;
+  text-transform:uppercase;
+}
+
+.form-group input{
+  width:100%;
+
+  padding:14px 15px;
+
+  color:var(--white);
+  background:#08090A;
+
+  border:1px solid var(--line);
+  border-radius:2px;
+
+  outline:none;
+
+  transition:
+    border-color .2s,
+    box-shadow .2s;
+}
+
+.form-group input:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 2px rgba(232,84,42,.08);
+}
+
+.form-group input::placeholder{
+  color:#55585E;
+}
+
+.btn{
+  width:100%;
+
+  border:0;
+  border-radius:2px;
+
+  padding:14px 20px;
+
+  font-size:.88rem;
+  font-weight:500;
+
+  transition:
+    transform .2s,
+    opacity .2s,
+    background .2s;
+}
+
+.btn:hover{
+  transform:translateY(-1px);
+}
+
+.btn-primary{
+  color:var(--black);
+  background:var(--accent);
+}
+
+.btn-primary:hover{
+  opacity:.88;
+}
+
+.btn-secondary{
+  color:var(--white);
+  background:transparent;
+  border:1px solid var(--line);
+}
+
+.btn-secondary:hover{
+  border-color:var(--white);
+}
+
+.message{
+  min-height:20px;
+  margin-top:15px;
+
+  font-size:.8rem;
+  line-height:1.5;
+}
+
+.message.error{
+  color:var(--danger);
+}
+
+.message.success{
+  color:var(--success);
+}
+
+/* =========================
+   STATUS
+========================= */
+
+.system-status{
+  display:flex;
+  align-items:center;
+  gap:9px;
+
+  margin-top:30px;
+
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.68rem;
+  color:var(--grey);
+}
+
+.status-dot{
+  width:7px;
+  height:7px;
+
+  border-radius:50%;
+  background:var(--success);
+
+  box-shadow:0 0 10px rgba(73,199,122,.5);
+}
+
+/* =========================
+   DASHBOARD
+========================= */
+
+.dashboard{
+  display:none;
+}
+
+.dashboard.active{
+  display:block;
+}
+
+.profile-grid{
+  display:grid;
+  grid-template-columns:1.2fr .8fr;
+  gap:20px;
+}
+
+.card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  padding:32px;
+}
+
+.card-header{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:20px;
+
+  margin-bottom:28px;
+}
+
+.card h2{
+  font-size:2rem;
+}
+
+.member-badge{
+  color:var(--accent);
+  border:1px solid var(--accent);
+  padding:6px 10px;
+
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.65rem;
+  white-space:nowrap;
+}
+
+.profile-name{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:3rem;
+  text-transform:uppercase;
+}
+
+.profile-email{
+  color:var(--grey);
+  margin-top:5px;
+}
+
+.data-list{
+  margin-top:28px;
+}
+
+.data-row{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+
+  padding:15px 0;
+  border-top:1px solid var(--line);
+
+  font-size:.84rem;
+}
+
+.data-row span:first-child{
+  color:var(--grey);
+}
+
+.data-row span:last-child{
+  text-align:right;
+}
+
+/* =========================
+   MISSIONS
+========================= */
+
+.mission-card{
+  margin-top:20px;
+}
+
+.mission-item{
+  display:flex;
+  align-items:center;
+  gap:18px;
+
+  padding:18px 0;
+  border-top:1px solid var(--line);
+}
+
+.mission-number{
+  color:var(--grey);
+
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.7rem;
+}
+
+.mission-info{
+  flex:1;
+}
+
+.mission-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:1.2rem;
+  text-transform:uppercase;
+}
+
+.mission-date{
+  margin-top:3px;
+
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.65rem;
+  color:var(--grey);
+}
+
+.status{
+  padding:5px 10px;
+  border:1px solid var(--line);
+  border-radius:20px;
+
+  color:var(--grey);
+
+  font-size:.65rem;
+}
+
+.status.go{
+  color:var(--accent);
+  border-color:var(--accent);
+}
+
+/* =========================
+   LOGOUT
+========================= */
+
+.logout{
+  margin-top:25px;
+  color:#999;
+  background:none;
+  border:0;
+
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.7rem;
+
+  transition:.2s;
+}
+
+.logout:hover{
+  color:var(--danger);
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+  padding:30px 0;
+
+  border-top:1px solid var(--line);
+
+  color:var(--grey);
+
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.65rem;
+}
+
+footer .wrap{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:760px){
+
+  .wrap{
+    width:min(100% - 36px,1180px);
+  }
+
   nav{
-    position: fixed; top:0; left:0; right:0; z-index: 20;
-    border-bottom: 1px solid var(--line);
-    background: rgba(6,6,7,0.75);
-    backdrop-filter: blur(10px);
-  }
-  nav .wrap{ display:flex; align-items:center; justify-content: space-between; height: 68px; }
-  .brand{
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700;
-    font-size: 1.3rem;
-    letter-spacing: 0.06em;
-  }
-  .brand span{ color: var(--accent); }
-  .navlinks{ display:flex; gap: 34px; }
-  .navlinks a{
-    font-size: 0.82rem;
-    color: var(--grey);
-    letter-spacing: 0.03em;
-    transition: color 0.2s ease;
-  }
-  .navlinks a:hover{ color: var(--white); }
-  .nav-cta{
-    border: 1px solid var(--white);
-    padding: 9px 20px;
-    font-size: 0.8rem;
-    border-radius: 2px;
-    transition: background 0.2s ease, color 0.2s ease;
-  }
-  .nav-cta:hover{ background: var(--white); color: var(--black); }
-
-  /* HERO */
-  .hero{
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 140px 0 80px;
-    background:
-      radial-gradient(ellipse at 50% 20%, rgba(232,84,42,0.10), transparent 55%),
-      linear-gradient(180deg, #060607 0%, #0A0B0D 70%, #060607 100%);
-    overflow: hidden;
-    border-bottom: 1px solid var(--line);
-  }
-  .hero-stars{
-    position: absolute; inset: 0;
-    background-image:
-      radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.5) 50%, transparent),
-      radial-gradient(1px 1px at 70% 60%, rgba(255,255,255,0.4) 50%, transparent),
-      radial-gradient(1px 1px at 40% 80%, rgba(255,255,255,0.35) 50%, transparent),
-      radial-gradient(1px 1px at 85% 15%, rgba(255,255,255,0.45) 50%, transparent),
-      radial-gradient(1px 1px at 10% 65%, rgba(255,255,255,0.3) 50%, transparent),
-      radial-gradient(1px 1px at 60% 25%, rgba(255,255,255,0.4) 50%, transparent),
-      radial-gradient(1px 1px at 90% 75%, rgba(255,255,255,0.3) 50%, transparent);
-    background-size: 100% 100%;
-    opacity: 0.8;
-  }
-  .hero-content{ position: relative; z-index: 2; }
-  .mission-tag{
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.78rem;
-    color: var(--accent);
-    letter-spacing: 0.04em;
-    margin-bottom: 22px;
-    opacity: 0;
-    animation: fadeUp 0.7s ease forwards;
-  }
-  h1{
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700;
-    font-size: clamp(3rem, 9vw, 7.5rem);
-    line-height: 0.95;
-    letter-spacing: -0.01em;
-    text-transform: uppercase;
-    max-width: 14ch;
-    opacity: 0;
-    animation: fadeUp 0.8s ease 0.1s forwards;
-  }
-  .hero-desc{
-    margin-top: 28px;
-    max-width: 50ch;
-    font-size: 1.1rem;
-    color: var(--grey);
-    opacity: 0;
-    animation: fadeUp 0.8s ease 0.22s forwards;
-  }
-  .hero-actions{
-    margin-top: 40px;
-    display: flex; gap: 16px; flex-wrap: wrap;
-    opacity: 0;
-    animation: fadeUp 0.8s ease 0.34s forwards;
-  }
-  .btn-primary{
-    background: var(--accent);
-    color: var(--black);
-    padding: 14px 28px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    border-radius: 2px;
-    transition: opacity 0.2s ease;
-  }
-  .btn-primary:hover{ opacity: 0.85; }
-  .btn-secondary{
-    border: 1px solid var(--line);
-    color: var(--white);
-    padding: 14px 28px;
-    font-size: 0.9rem;
-    border-radius: 2px;
-    transition: border-color 0.2s ease;
-  }
-  .btn-secondary:hover{ border-color: var(--white); }
-
-  @keyframes fadeUp{
-    from{ opacity:0; transform: translateY(16px); }
-    to{ opacity:1; transform: translateY(0); }
-  }
-  @media (prefers-reduced-motion: reduce){
-    .mission-tag, h1, .hero-desc, .hero-actions{ animation:none; opacity:1; }
+    height:60px;
   }
 
-  /* COUNTDOWN STRIP */
-  .countdown-strip{
-    border-bottom: 1px solid var(--line);
-    background: var(--panel);
-  }
-  .countdown-strip .wrap{
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 22px 32px; flex-wrap: wrap; gap: 20px;
-  }
-  .countdown-label{
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.78rem;
-    color: var(--grey);
-  }
-  .countdown-timer{
-    display: flex; gap: 26px;
-  }
-  .timer-block{ text-align: center; }
-  .timer-num{
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700;
-    font-size: 1.9rem;
-    line-height: 1;
-  }
-  .timer-unit{
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.65rem;
-    color: var(--grey);
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
+  .back-link{
+    display:none;
   }
 
-  /* SECTIONS */
-  section{ padding: 100px 0; border-bottom: 1px solid var(--line); }
-  .section-eyebrow{
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.78rem;
-    color: var(--accent);
-    margin-bottom: 18px;
-  }
-  h2{
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 600;
-    font-size: clamp(2rem, 4vw, 3rem);
-    text-transform: uppercase;
-    max-width: 16ch;
+  .page{
+    padding-top:105px;
   }
 
-  /* STATS ROW */
-  .stats-row{
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 40px;
-    margin-top: 56px;
-  }
-  .stat{ border-top: 1px solid var(--line); padding-top: 20px; }
-  .stat-num{
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700;
-    font-size: 2.6rem;
-    color: var(--white);
-  }
-  .stat-label{
-    font-size: 0.88rem;
-    color: var(--grey);
-    margin-top: 6px;
+  .auth-grid{
+    grid-template-columns:1fr;
   }
 
-  /* MISSIONS LIST */
-  .missions{ margin-top: 56px; }
-  .mission-row{
-    display: grid;
-    grid-template-columns: 100px 1fr auto auto;
-    gap: 24px;
-    align-items: center;
-    padding: 22px 0;
-    border-top: 1px solid var(--line);
-    transition: background 0.2s ease;
+  .auth-panel{
+    padding:28px 22px;
   }
-  .missions .mission-row:last-child{ border-bottom: 1px solid var(--line); }
-  .mission-row:hover{ background: var(--panel); }
-  .mission-index{
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.8rem;
-    color: var(--grey);
-  }
-  .mission-name{
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 600;
-    font-size: 1.3rem;
-    text-transform: uppercase;
-  }
-  .mission-date{
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.8rem;
-    color: var(--grey);
-  }
-  .mission-status{
-    font-size: 0.78rem;
-    padding: 6px 14px;
-    border-radius: 20px;
-    border: 1px solid var(--line);
-    color: var(--grey);
-    white-space: nowrap;
-  }
-  .mission-status.go{ color: var(--accent); border-color: var(--accent); }
 
-  /* GALLERY GRID */
-  .gallery-grid{
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2px;
-    margin-top: 56px;
+  .profile-grid{
+    grid-template-columns:1fr;
   }
-  .gallery-grid div{
-    aspect-ratio: 4/3;
-    background: var(--panel);
-    border: 1px solid var(--line);
-    display: flex; align-items:center; justify-content:center;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--grey);
-    overflow: hidden;
-  }
-  .gallery-grid img{ width:100%; height:100%; object-fit: cover; filter: grayscale(20%) contrast(1.05); }
 
-  /* CTA */
-  .cta-section{
-    text-align: center;
-    padding: 120px 0;
-    border-bottom: none;
+  .card{
+    padding:25px 20px;
   }
-  .cta-section h2{ margin: 0 auto 30px; }
 
-  footer{ padding: 50px 0; }
+  .profile-name{
+    font-size:2.4rem;
+  }
+
+  .mission-item{
+    align-items:flex-start;
+  }
+
+  .mission-item .status{
+    display:none;
+  }
+
   footer .wrap{
-    display:flex; justify-content: space-between; flex-wrap: wrap; gap: 20px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--grey);
+    flex-direction:column;
   }
-
-  @media (max-width: 700px){
-    .mission-row{ grid-template-columns: 1fr; gap: 6px; }
-    .gallery-grid{ grid-template-columns: repeat(2, 1fr); }
-    .countdown-timer{ gap: 16px; }
-    .timer-num{ font-size: 1.5rem; }
-  }
+}
 </style>
 </head>
+
 <body>
 
 <nav>
   <div class="wrap">
-    <div class="brand">NOVA<span>.</span></div>
-    <div class="navlinks">
-      <a href="#missions">Missions</a>
-      <a href="#programme">Programme</a>
-      <a href="#galerie">Galerie</a>
+
+    <a href="index.html" class="brand">
+      NOVA<span>.</span>
+    </a>
+
+    <div class="nav-right">
+      <a href="index.html" class="back-link">
+        ← Retour à Mission Control
+      </a>
     </div>
-    <a class="nav-cta" href="nova-account.html" id="navCta">Rejoindre l'équipe</a>
+
   </div>
 </nav>
 
-<header class="hero">
-  <div class="hero-stars"></div>
-  <div class="wrap hero-content">
-    <div class="mission-tag">PROCHAIN LANCEMENT — PAS DE TIR 1</div>
-    <h1>Rendre la vie multiplanétaire</h1>
-    <p class="hero-desc">
-      Nous développons les fusées et vaisseaux les plus avancés au monde pour transporter des humains
-      vers la Lune, Mars, et au-delà.
-    </p>
-    <div class="hero-actions">
-      <a class="btn-primary" href="#missions">Voir les missions</a>
-      <a class="btn-secondary" href="#programme">Le programme</a>
-    </div>
-  </div>
-</header>
+<main class="page">
 
-<div class="countdown-strip">
   <div class="wrap">
-    <div class="countdown-label">MISSION AURORA-3 — DÉCOLLAGE DANS</div>
-    <div class="countdown-timer" id="countdown">
-      <div class="timer-block"><div class="timer-num" id="cd-days">--</div><div class="timer-unit">Jours</div></div>
-      <div class="timer-block"><div class="timer-num" id="cd-hours">--</div><div class="timer-unit">Heures</div></div>
-      <div class="timer-block"><div class="timer-num" id="cd-min">--</div><div class="timer-unit">Min</div></div>
-      <div class="timer-block"><div class="timer-num" id="cd-sec">--</div><div class="timer-unit">Sec</div></div>
-    </div>
-  </div>
-</div>
 
-<section id="programme">
-  <div class="wrap">
-    <div class="section-eyebrow">Le programme</div>
-    <h2>Construire la génération de fusées réutilisables</h2>
-    <div class="stats-row">
-      <div class="stat"><div class="stat-num">312</div><div class="stat-label">Lancements réussis</div></div>
-      <div class="stat"><div class="stat-num">98%</div><div class="stat-label">Taux de récupération</div></div>
-      <div class="stat"><div class="stat-num">14</div><div class="stat-label">Missions habitées</div></div>
-      <div class="stat"><div class="stat-num">2031</div><div class="stat-label">Objectif Mars</div></div>
-    </div>
-  </div>
-</section>
+    <!-- ======================
+         AUTHENTIFICATION
+    ======================= -->
 
-<section id="missions">
-  <div class="wrap">
-    <div class="section-eyebrow">Calendrier</div>
-    <h2>Missions à venir</h2>
-    <div class="missions">
-      <div class="mission-row">
-        <div class="mission-index">01</div>
-        <div class="mission-name">Aurora-3 — Ravitaillement orbital</div>
-        <div class="mission-date">14 OCT 2026</div>
-        <div class="mission-status go">GO</div>
+    <div id="authView">
+
+      <div class="page-header">
+        <div class="eyebrow">ACCÈS MEMBRE / NOVA-01</div>
+
+        <h1>
+          Centre de contrôle
+        </h1>
+
+        <p class="subtitle">
+          Connectez-vous à votre espace NOVA pour suivre les missions,
+          votre profil et les prochaines opérations.
+        </p>
       </div>
-      <div class="mission-row">
-        <div class="mission-index">02</div>
-        <div class="mission-name">Lunaris — Retour d'équipage</div>
-        <div class="mission-date">02 NOV 2026</div>
-        <div class="mission-status go">GO</div>
-      </div>
-      <div class="mission-row">
-        <div class="mission-index">03</div>
-        <div class="mission-name">Helios — Déploiement satellite</div>
-        <div class="mission-date">19 NOV 2026</div>
-        <div class="mission-status">EN PRÉPARATION</div>
-      </div>
-      <div class="mission-row">
-        <div class="mission-index">04</div>
-        <div class="mission-name">Terra Nova — Essai vaisseau</div>
-        <div class="mission-date">05 DÉC 2026</div>
-        <div class="mission-status">EN PRÉPARATION</div>
-      </div>
-    </div>
-  </div>
-</section>
 
-<section id="galerie">
-  <div class="wrap">
-    <div class="section-eyebrow">Galerie</div>
-    <h2>De l'usine au pas de tir</h2>
-    <div class="gallery-grid">
-      <div>Image 1</div>
-      <div>Image 2</div>
-      <div>Image 3</div>
-      <div>Image 4</div>
-      <div>Image 5</div>
-      <div>Image 6</div>
-    </div>
-  </div>
-</section>
+      <div class="auth-grid">
 
-<section class="cta-section" id="contact">
-  <div class="wrap">
-    <div class="section-eyebrow">Rejoins-nous</div>
-    <h2>L'espace a besoin de bâtisseurs</h2>
-    <a class="btn-primary" href="nova-account.html">Voir les postes ouverts</a>
+        <!-- CONNEXION -->
+
+        <section class="auth-panel">
+
+          <h2>Connexion</h2>
+
+          <p class="panel-description">
+            Accédez à votre compte membre NOVA.
+          </p>
+
+          <form id="loginForm">
+
+            <div class="form-group">
+              <label for="loginEmail">
+                Adresse e-mail
+              </label>
+
+              <input
+                id="loginEmail"
+                type="email"
+                placeholder="vous@exemple.fr"
+                autocomplete="email"
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="loginPassword">
+                Mot de passe
+              </label>
+
+              <input
+                id="loginPassword"
+                type="password"
+                placeholder="••••••••"
+                autocomplete="current-password"
+                required
+              >
+            </div>
+
+            <button class="btn btn-primary" type="submit">
+              Se connecter
+            </button>
+
+            <div id="loginMessage" class="message"></div>
+
+          </form>
+
+        </section>
+
+
+        <!-- INSCRIPTION -->
+
+        <section class="auth-panel">
+
+          <h2>Rejoindre NOVA</h2>
+
+          <p class="panel-description">
+            Créez votre identité de membre et rejoignez
+            la prochaine génération de bâtisseurs.
+          </p>
+
+          <form id="registerForm">
+
+            <div class="form-group">
+              <label for="registerName">
+                Nom complet
+              </label>
+
+              <input
+                id="registerName"
+                type="text"
+                placeholder="Jean Dupont"
+                autocomplete="name"
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="registerEmail">
+                Adresse e-mail
+              </label>
+
+              <input
+                id="registerEmail"
+                type="email"
+                placeholder="vous@exemple.fr"
+                autocomplete="email"
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="registerPassword">
+                Mot de passe
+              </label>
+
+              <input
+                id="registerPassword"
+                type="password"
+                placeholder="Minimum 6 caractères"
+                minlength="6"
+                autocomplete="new-password"
+                required
+              >
+            </div>
+
+            <button class="btn btn-secondary" type="submit">
+              Créer mon compte
+            </button>
+
+            <div id="registerMessage" class="message"></div>
+
+          </form>
+
+        </section>
+
+      </div>
+
+      <div class="system-status">
+        <span class="status-dot"></span>
+        SYSTÈME NOVA OPÉRATIONNEL
+      </div>
+
+    </div>
+
+
+    <!-- ======================
+         DASHBOARD
+    ======================= -->
+
+    <div id="dashboard" class="dashboard">
+
+      <div class="page-header">
+
+        <div class="eyebrow">
+          IDENTITÉ CONFIRMÉE / ACCÈS AUTORISÉ
+        </div>
+
+        <h1>
+          Bienvenue à bord.
+        </h1>
+
+        <p class="subtitle">
+          Votre accès au réseau NOVA est actif.
+          Voici votre centre de contrôle personnel.
+        </p>
+
+      </div>
+
+
+      <div class="profile-grid">
+
+        <!-- PROFIL -->
+
+        <section class="card">
+
+          <div class="card-header">
+
+            <div>
+              <div class="eyebrow">
+                PROFIL MEMBRE
+              </div>
+
+              <h2>
+                Identité
+              </h2>
+            </div>
+
+            <div class="member-badge">
+              NOVA MEMBER
+            </div>
+
+          </div>
+
+          <div id="profileName" class="profile-name">
+            —
+          </div>
+
+          <div id="profileEmail" class="profile-email">
+            —
+          </div>
+
+          <div class="data-list">
+
+            <div class="data-row">
+              <span>Statut</span>
+              <span style="color:var(--success)">
+                ACTIF
+              </span>
+            </div>
+
+            <div class="data-row">
+              <span>Accréditation</span>
+              <span>NOVA-01</span>
+            </div>
+
+            <div class="data-row">
+              <span>Base</span>
+              <span>Pas de tir 1</span>
+            </div>
+
+            <div class="data-row">
+              <span>Inscription</span>
+              <span id="profileDate">—</span>
+            </div>
+
+          </div>
+
+          <button id="logoutButton" class="logout">
+            DÉCONNEXION →
+          </button>
+
+        </section>
+
+
+        <!-- PROCHAINE MISSION -->
+
+        <section class="card">
+
+          <div class="card-header">
+
+            <div>
+              <div class="eyebrow">
+                PROCHAINE OPÉRATION
+              </div>
+
+              <h2>
+                Aurora-3
+              </h2>
+            </div>
+
+            <div class="member-badge">
+              GO
+            </div>
+
+          </div>
+
+          <p class="panel-description">
+            Mission de ravitaillement orbital.
+            Préparation finale avant fenêtre de lancement.
+          </p>
+
+          <div class="data-list">
+
+            <div class="data-row">
+              <span>Date</span>
+              <span>14 OCT 2026</span>
+            </div>
+
+            <div class="data-row">
+              <span>Mission</span>
+              <span>AURORA-3</span>
+            </div>
+
+            <div class="data-row">
+              <span>Type</span>
+              <span>Ravitaillement</span>
+            </div>
+
+            <div class="data-row">
+              <span>Statut</span>
+              <span style="color:var(--accent)">
+                GO
+              </span>
+            </div>
+
+          </div>
+
+        </section>
+
+      </div>
+
+
+      <!-- MISSIONS -->
+
+      <section class="card mission-card">
+
+        <div class="card-header">
+
+          <div>
+            <div class="eyebrow">
+              MANIFEST
+            </div>
+
+            <h2>
+              Missions suivies
+            </h2>
+          </div>
+
+        </div>
+
+        <div class="mission-item">
+
+          <div class="mission-number">
+            01
+          </div>
+
+          <div class="mission-info">
+
+            <div class="mission-title">
+              Aurora-3 — Ravitaillement orbital
+            </div>
+
+            <div class="mission-date">
+              14 OCT 2026
+            </div>
+
+          </div>
+
+          <div class="status go">
+            GO
+          </div>
+
+        </div>
+
+        <div class="mission-item">
+
+          <div class="mission-number">
+            02
+          </div>
+
+          <div class="mission-info">
+
+            <div class="mission-title">
+              Lunaris — Retour d'équipage
+            </div>
+
+            <div class="mission-date">
+              02 NOV 2026
+            </div>
+
+          </div>
+
+          <div class="status go">
+            GO
+          </div>
+
+        </div>
+
+        <div class="mission-item">
+
+          <div class="mission-number">
+            03
+          </div>
+
+          <div class="mission-info">
+
+            <div class="mission-title">
+              Helios — Déploiement satellite
+            </div>
+
+            <div class="mission-date">
+              19 NOV 2026
+            </div>
+
+          </div>
+
+          <div class="status">
+            PRÉPARATION
+          </div>
+
+        </div>
+
+        <div class="mission-item">
+
+          <div class="mission-number">
+            04
+          </div>
+
+          <div class="mission-info">
+
+            <div class="mission-title">
+              Terra Nova — Essai vaisseau
+            </div>
+
+            <div class="mission-date">
+              05 DÉC 2026
+            </div>
+
+          </div>
+
+          <div class="status">
+            PRÉPARATION
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
   </div>
-</section>
+
+</main>
+
 
 <footer>
+
   <div class="wrap">
-    <span>© 2026 — NOVA Aerospace</span>
-    <span>Pas de tir 1 · Base côtière</span>
+
+    <span>
+      © 2026 — NOVA Aerospace
+    </span>
+
+    <span>
+      SYSTÈME MEMBRE / NOVA-01
+    </span>
+
   </div>
+
 </footer>
 
+
 <script>
-  // Compte à rebours vers une date de lancement fictive (14 jours à partir de maintenant)
-  const launchDate = new Date();
-  launchDate.setDate(launchDate.getDate() + 14);
 
-  function updateCountdown(){
-    const now = new Date();
-    let diff = launchDate - now;
-    if(diff < 0) diff = 0;
-    const days = Math.floor(diff / (1000*60*60*24));
-    const hours = Math.floor((diff / (1000*60*60)) % 24);
-    const mins = Math.floor((diff / (1000*60)) % 60);
-    const secs = Math.floor((diff / 1000) % 60);
-    document.getElementById('cd-days').textContent = String(days).padStart(2,'0');
-    document.getElementById('cd-hours').textContent = String(hours).padStart(2,'0');
-    document.getElementById('cd-min').textContent = String(mins).padStart(2,'0');
-    document.getElementById('cd-sec').textContent = String(secs).padStart(2,'0');
-  }
-  updateCountdown();
-  setInterval(updateCountdown, 1000);
+/* ==========================================
+   UTILITAIRES
+========================================== */
 
-  // Affiche l'état connecté si un compte NOVA est actif dans ce navigateur
-  const currentUser = localStorage.getItem('nova_current_user');
-  if(currentUser){
-    try{
-      const user = JSON.parse(currentUser);
-      const navCta = document.getElementById('navCta');
-      navCta.textContent = `Bonjour, ${user.name} · Déconnexion`;
-      navCta.href = '#';
-      navCta.addEventListener('click', (e) => {
-        e.preventDefault();
-        localStorage.removeItem('nova_current_user');
-        window.location.reload();
-      });
-    }catch(err){}
+function getUsers(){
+
+  try{
+
+    return JSON.parse(
+      localStorage.getItem('nova_users') || '[]'
+    );
+
+  }catch(error){
+
+    return [];
+
   }
+
+}
+
+
+function saveUsers(users){
+
+  localStorage.setItem(
+    'nova_users',
+    JSON.stringify(users)
+  );
+
+}
+
+
+function setMessage(element, text, type){
+
+  element.textContent = text;
+  element.className = 'message ' + type;
+
+}
+
+
+/* ==========================================
+   VUES
+========================================== */
+
+const authView =
+  document.getElementById('authView');
+
+const dashboard =
+  document.getElementById('dashboard');
+
+
+function showDashboard(user){
+
+  authView.style.display = 'none';
+
+  dashboard.classList.add('active');
+
+  document.getElementById(
+    'profileName'
+  ).textContent = user.name;
+
+  document.getElementById(
+    'profileEmail'
+  ).textContent = user.email;
+
+  document.getElementById(
+    'profileDate'
+  ).textContent = user.createdAt || '—';
+
+}
+
+
+function showAuth(){
+
+  dashboard.classList.remove('active');
+
+  authView.style.display = 'block';
+
+}
+
+
+/* ==========================================
+   INSCRIPTION
+========================================== */
+
+document
+  .getElementById('registerForm')
+  .addEventListener('submit', function(event){
+
+    event.preventDefault();
+
+    const name =
+      document
+        .getElementById('registerName')
+        .value
+        .trim();
+
+    const email =
+      document
+        .getElementById('registerEmail')
+        .value
+        .trim()
+        .toLowerCase();
+
+    const password =
+      document
+        .getElementById('registerPassword')
+        .value;
+
+    const message =
+      document.getElementById(
+        'registerMessage'
+      );
+
+    if(name.length < 2){
+
+      setMessage(
+        message,
+        'Veuillez entrer un nom valide.',
+        'error'
+      );
+
+      return;
+
+    }
+
+    if(password.length < 6){
+
+      setMessage(
+        message,
+        'Le mot de passe doit contenir au moins 6 caractères.',
+        'error'
+      );
+
+      return;
+
+    }
+
+    const users = getUsers();
+
+    const existingUser =
+      users.find(
+        user => user.email === email
+      );
+
+    if(existingUser){
+
+      setMessage(
+        message,
+        'Un compte existe déjà avec cette adresse.',
+        'error'
+      );
+
+      return;
+
+    }
+
+    const user = {
+
+      id:
+        'NOVA-' +
+        Date.now(),
+
+      name:name,
+
+      email:email,
+
+      password:password,
+
+      createdAt:
+        new Date().toLocaleDateString(
+          'fr-FR',
+          {
+            day:'2-digit',
+            month:'2-digit',
+            year:'numeric'
+          }
+        )
+
+    };
+
+    users.push(user);
+
+    saveUsers(users);
+
+    localStorage.setItem(
+      'nova_current_user',
+      JSON.stringify(user)
+    );
+
+    showDashboard(user);
+
+  });
+
+
+/* ==========================================
+   CONNEXION
+========================================== */
+
+document
+  .getElementById('loginForm')
+  .addEventListener('submit', function(event){
+
+    event.preventDefault();
+
+    const email =
+      document
+        .getElementById('loginEmail')
+        .value
+        .trim()
+        .toLowerCase();
+
+    const password =
+      document
+        .getElementById('loginPassword')
+        .value;
+
+    const message =
+      document.getElementById(
+        'loginMessage'
+      );
+
+    const users = getUsers();
+
+    const user =
+      users.find(
+        user =>
+          user.email === email &&
+          user.password === password
+      );
+
+    if(!user){
+
+      setMessage(
+        message,
+        'Adresse e-mail ou mot de passe incorrect.',
+        'error'
+      );
+
+      return;
+
+    }
+
+    localStorage.setItem(
+      'nova_current_user',
+      JSON.stringify(user)
+    );
+
+    showDashboard(user);
+
+  });
+
+
+/* ==========================================
+   DÉCONNEXION
+========================================== */
+
+document
+  .getElementById('logoutButton')
+  .addEventListener('click', function(){
+
+    localStorage.removeItem(
+      'nova_current_user'
+    );
+
+    showAuth();
+
+    document
+      .getElementById('loginForm')
+      .reset();
+
+    window.scrollTo({
+      top:0,
+      behavior:'smooth'
+    });
+
+  });
+
+
+/* ==========================================
+   RESTAURATION SESSION
+========================================== */
+
+(function restoreSession(){
+
+  const currentUser =
+    localStorage.getItem(
+      'nova_current_user'
+    );
+
+  if(!currentUser){
+
+    showAuth();
+
+    return;
+
+  }
+
+  try{
+
+    const user =
+      JSON.parse(currentUser);
+
+    if(user && user.email){
+
+      showDashboard(user);
+
+    }else{
+
+      showAuth();
+
+    }
+
+  }catch(error){
+
+    localStorage.removeItem(
+      'nova_current_user'
+    );
+
+    showAuth();
+
+  }
+
+})();
+
 </script>
 
 </body>
