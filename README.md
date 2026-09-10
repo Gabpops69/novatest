@@ -420,7 +420,7 @@ document.querySelectorAll('.gallery-grid img').forEach(img => {
   <div><img src="cpmjny.jpg" alt="Image 2"></div>
   <div><img src="neptune-credit-960x640.jpg" alt="Image 3"></div>
   <div><img src="la-geante-jupiter-1800x1016.jpg" alt="Image 4"></div>
-  <div><img src="images/image5.jpg" alt="Image 5"></div>
+  <div><img src="Saturn_with_auroras.jpg" alt="Image 5"></div>
   <div><img src="images/image6.jpg" alt="Image 6"></div>
     </div>
   </div>
