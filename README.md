@@ -440,3 +440,331 @@
 
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA — Accès</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black: #060607;
+    --panel: #0D0E10;
+    --line: #232529;
+    --white: #F5F5F3;
+    --grey: #8A8D93;
+    --accent: #E8542A;
+    --error: #E85A5A;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  a{ color: inherit; text-decoration: none; }
+
+  .stars{
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.5) 50%, transparent),
+      radial-gradient(1px 1px at 70% 60%, rgba(255,255,255,0.4) 50%, transparent),
+      radial-gradient(1px 1px at 40% 80%, rgba(255,255,255,0.35) 50%, transparent),
+      radial-gradient(1px 1px at 85% 15%, rgba(255,255,255,0.45) 50%, transparent),
+      radial-gradient(1px 1px at 10% 65%, rgba(255,255,255,0.3) 50%, transparent),
+      radial-gradient(1px 1px at 60% 25%, rgba(255,255,255,0.4) 50%, transparent),
+      radial-gradient(1px 1px at 90% 75%, rgba(255,255,255,0.3) 50%, transparent);
+    opacity: 0.8;
+  }
+
+  .card{
+    position: relative; z-index: 2;
+    width: 100%; max-width: 420px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 44px 38px;
+  }
+  .brand{
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+    letter-spacing: 0.06em;
+    text-align: center;
+    margin-bottom: 6px;
+  }
+  .brand span{ color: var(--accent); }
+  .subtitle{
+    text-align: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--grey);
+    letter-spacing: 0.04em;
+    margin-bottom: 34px;
+  }
+
+  .tabs{
+    display: flex;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    margin-bottom: 30px;
+    overflow: hidden;
+  }
+  .tab{
+    flex: 1;
+    text-align: center;
+    padding: 12px;
+    font-size: 0.85rem;
+    color: var(--grey);
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .tab.active{ background: var(--accent); color: var(--black); font-weight: 500; }
+
+  form{ display: none; flex-direction: column; gap: 18px; }
+  form.active{ display: flex; }
+
+  label{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--grey);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: block;
+  }
+  input{
+    width: 100%;
+    background: var(--black);
+    border: 1px solid var(--line);
+    color: var(--white);
+    padding: 12px 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.92rem;
+    border-radius: 3px;
+    outline: none;
+    transition: border-color 0.2s ease;
+  }
+  input:focus{ border-color: var(--accent); }
+
+  .submit-btn{
+    background: var(--accent);
+    color: var(--black);
+    border: none;
+    padding: 13px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    margin-top: 6px;
+  }
+  .submit-btn:hover{ opacity: 0.88; }
+  .submit-btn:disabled{ opacity: 0.5; cursor: not-allowed; }
+
+  .msg{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.76rem;
+    padding: 10px 12px;
+    border-radius: 3px;
+    display: none;
+  }
+  .msg.show{ display: block; }
+  .msg.error{ background: rgba(232,90,90,0.1); color: var(--error); border: 1px solid rgba(232,90,90,0.3); }
+  .msg.success{ background: rgba(232,84,42,0.1); color: var(--accent); border: 1px solid rgba(232,84,42,0.3); }
+
+  .welcome{ display:none; text-align: center; }
+  .welcome.show{ display: block; }
+  .welcome h2{
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1.8rem;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .welcome p{ color: var(--grey); font-size: 0.9rem; margin-bottom: 24px; }
+  .logout-btn{
+    border: 1px solid var(--line);
+    padding: 10px 22px;
+    font-size: 0.82rem;
+    border-radius: 3px;
+    cursor: pointer;
+    background: transparent;
+    color: var(--white);
+  }
+  .logout-btn:hover{ border-color: var(--white); }
+
+  .hint{
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--grey);
+    margin-top: 22px;
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+
+<div class="stars"></div>
+
+<div class="card">
+  <div id="authView">
+    <div class="brand">NOVA<span>.</span></div>
+    <div class="subtitle">ACCÈS MISSION CONTROL</div>
+
+    <div class="tabs">
+      <div class="tab active" data-tab="login">Se connecter</div>
+      <div class="tab" data-tab="signup">Créer un compte</div>
+    </div>
+
+    <div class="msg" id="msgBox"></div>
+
+    <form id="loginForm" class="active">
+      <div>
+        <label>Email</label>
+        <input type="email" id="loginEmail" required>
+      </div>
+      <div>
+        <label>Mot de passe</label>
+        <input type="password" id="loginPassword" required>
+      </div>
+      <button type="submit" class="submit-btn">Se connecter</button>
+    </form>
+
+    <form id="signupForm">
+      <div>
+        <label>Nom</label>
+        <input type="text" id="signupName" required>
+      </div>
+      <div>
+        <label>Email</label>
+        <input type="email" id="signupEmail" required>
+      </div>
+      <div>
+        <label>Mot de passe</label>
+        <input type="password" id="signupPassword" required minlength="6">
+      </div>
+      <button type="submit" class="submit-btn">Créer mon compte</button>
+    </form>
+
+    <div class="hint">Compte de démonstration — les identifiants sont stockés pour cet artifact, pas pour un vrai service sécurisé.</div>
+  </div>
+
+  <div class="welcome" id="welcomeView">
+    <div class="brand" style="margin-bottom:24px;">NOVA<span>.</span></div>
+    <h2 id="welcomeName">Bienvenue</h2>
+    <p id="welcomeEmail"></p>
+    <button class="logout-btn" id="logoutBtn">Se déconnecter</button>
+  </div>
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const forms = { login: document.getElementById('loginForm'), signup: document.getElementById('signupForm') };
+  const msgBox = document.getElementById('msgBox');
+  const authView = document.getElementById('authView');
+  const welcomeView = document.getElementById('welcomeView');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      Object.values(forms).forEach(f => f.classList.remove('active'));
+      forms[tab.dataset.tab].classList.add('active');
+      hideMsg();
+    });
+  });
+
+  function showMsg(text, type){
+    msgBox.textContent = text;
+    msgBox.className = 'msg show ' + type;
+  }
+  function hideMsg(){
+    msgBox.className = 'msg';
+  }
+
+  function showWelcome(name, email){
+    authView.style.display = 'none';
+    welcomeView.classList.add('show');
+    document.getElementById('welcomeName').textContent = `Bon retour, ${name}`;
+    document.getElementById('welcomeEmail').textContent = email;
+  }
+
+  document.getElementById('signupForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    hideMsg();
+    const name = document.getElementById('signupName').value.trim();
+    const email = document.getElementById('signupEmail').value.trim().toLowerCase();
+    const password = document.getElementById('signupPassword').value;
+    const btn = e.target.querySelector('.submit-btn');
+    btn.disabled = true;
+
+    try{
+      let exists = null;
+      try{ exists = await window.storage.get('account:' + email, false); } catch(err){ exists = null; }
+
+      if(exists){
+        showMsg('Un compte existe déjà avec cet email.', 'error');
+        btn.disabled = false;
+        return;
+      }
+
+      await window.storage.set('account:' + email, JSON.stringify({ name, email, password }), false);
+      showMsg('Compte créé avec succès.', 'success');
+      setTimeout(() => showWelcome(name, email), 500);
+    }catch(err){
+      showMsg('Erreur lors de la création du compte. Réessaie.', 'error');
+    }
+    btn.disabled = false;
+  });
+
+  document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    hideMsg();
+    const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+    const password = document.getElementById('loginPassword').value;
+    const btn = e.target.querySelector('.submit-btn');
+    btn.disabled = true;
+
+    try{
+      let result = null;
+      try{ result = await window.storage.get('account:' + email, false); } catch(err){ result = null; }
+
+      if(!result){
+        showMsg('Aucun compte trouvé avec cet email.', 'error');
+        btn.disabled = false;
+        return;
+      }
+      const account = JSON.parse(result.value);
+      if(account.password !== password){
+        showMsg('Mot de passe incorrect.', 'error');
+        btn.disabled = false;
+        return;
+      }
+      showWelcome(account.name, account.email);
+    }catch(err){
+      showMsg('Erreur de connexion. Réessaie.', 'error');
+    }
+    btn.disabled = false;
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    welcomeView.classList.remove('show');
+    authView.style.display = 'block';
+    document.getElementById('loginForm').reset();
+    document.getElementById('signupForm').reset();
+    hideMsg();
+  });
+</script>
+
+</body>
+</html>
